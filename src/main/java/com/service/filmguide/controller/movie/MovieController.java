@@ -36,7 +36,7 @@ public class MovieController {
         return trendingMoviesProvider.getTrendingMovies(pageNumber);
     }
 
-    @PostMapping("/{movie_id}/addToWatchlist")
+    @PostMapping("/{movie_id}/addWatchlist")
     public ResponseEntity<Object> addMovieToWatchlist(@PathVariable String movie_id){
         int movieId = 0;
         try{
@@ -45,6 +45,17 @@ public class MovieController {
             throw new MovieNotFoundException(movie_id);
         }
         return movieService.addMovieToWatchlist(movieId);
+    }
+
+    @PostMapping("/{movie_id}/removeWatchlist")
+    public ResponseEntity<Object> removeFromWatchlist(@PathVariable String movie_id){
+        int movieId = 0;
+        try{
+            movieId = Integer.parseInt(movie_id);
+        } catch (NumberFormatException ex){
+            throw new MovieNotFoundException(movieId);
+        }
+        return movieService.removeFromWatchlist(movieId);
     }
 
     /*@GetMapping("/{movie_id}")

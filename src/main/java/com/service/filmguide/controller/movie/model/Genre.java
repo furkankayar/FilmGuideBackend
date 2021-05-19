@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Builder
 @Data
@@ -19,6 +16,10 @@ import javax.persistence.Table;
 public class Genre {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="auto_id")
+    private Long auto_id;
+
     @Column(name="id")
     private Integer id;
 

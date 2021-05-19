@@ -31,17 +31,23 @@ public class MovieService {
 
     public ResponseEntity<Object> addMovieToWatchlist(int movieId){
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
-
         User user = commonUtility.getCurrentUser();
 
         user.getWatchlist().add(movie);
-
         userRepository.save(user);
-
         Map<String, Object> map = new HashMap<>();
-
         map.put("success", true);
 
+        return commonUtility.buildResponse(map, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> removeFromWatchlist(int movieId){
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
+        User user = commonUtility.getCurrentUser();
+        user.getWatchlist().remove(movie);
+        userRepository.save(user);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
         return commonUtility.buildResponse(map, HttpStatus.OK);
     }
 }
