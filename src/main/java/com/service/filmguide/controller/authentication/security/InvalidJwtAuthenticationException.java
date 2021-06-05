@@ -1,4 +1,4 @@
-package com.service.filmguide.security;
+package com.service.filmguide.controller.authentication.security;
 
 import org.springframework.security.core.AuthenticationException;
 

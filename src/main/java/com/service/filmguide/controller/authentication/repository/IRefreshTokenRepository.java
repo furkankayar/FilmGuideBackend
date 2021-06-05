@@ -2,7 +2,7 @@ package com.service.filmguide.controller.authentication.repository;
 
 import java.util.Optional;
 
-import com.service.filmguide.controller.authentication.model.RefreshToken;
+import com.service.filmguide.model.RefreshToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

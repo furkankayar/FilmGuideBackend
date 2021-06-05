@@ -13,8 +13,8 @@ import lombok.ToString;
 @ToString
 public class LoginDAO {
     
-    @NotBlank(message = "Name is mandotary")
+    @NotBlank(message = "Missing username!")
     private String username;
-    @NotBlank(message = "Password is mandotary")
+    @NotBlank(message = "Missing password!")
     private String password;
 }

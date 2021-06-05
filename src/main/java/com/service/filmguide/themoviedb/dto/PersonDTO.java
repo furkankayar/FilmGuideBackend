@@ -1,7 +1,7 @@
 package com.service.filmguide.themoviedb.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.service.filmguide.controller.movie.model.Person;
+import com.service.filmguide.model.Person;
 import lombok.*;
 
 @Data

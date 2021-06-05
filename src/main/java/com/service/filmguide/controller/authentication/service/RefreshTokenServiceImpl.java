@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import com.service.filmguide.controller.authentication.model.RefreshToken;
+import com.service.filmguide.model.RefreshToken;
 import com.service.filmguide.controller.authentication.repository.IRefreshTokenRepository;
 
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 @Component("refreshTokenService")
 @AllArgsConstructor
 @Transactional
-public class RefreshTokenService {
+public class RefreshTokenServiceImpl implements IRefreshTokenService{
     
     private final IRefreshTokenRepository refreshTokenRepository;
 

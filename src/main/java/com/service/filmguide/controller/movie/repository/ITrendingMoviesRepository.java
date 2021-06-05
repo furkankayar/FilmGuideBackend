@@ -1,6 +1,6 @@
 package com.service.filmguide.controller.movie.repository;
 
-import com.service.filmguide.controller.movie.model.TrendingMovies;
+import com.service.filmguide.model.TrendingMovies;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

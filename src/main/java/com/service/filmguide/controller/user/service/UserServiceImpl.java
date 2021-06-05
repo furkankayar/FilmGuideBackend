@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.service.filmguide.controller.user.utility.UserMapper;
 import com.service.filmguide.controller.user.response.UserProfileDTO;
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 import com.service.filmguide.controller.user.repository.IUserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

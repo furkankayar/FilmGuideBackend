@@ -1,4 +1,4 @@
-package com.service.filmguide.controller.movie.model;
+package com.service.filmguide.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

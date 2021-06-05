@@ -1,4 +1,4 @@
-package com.service.filmguide.security;
+package com.service.filmguide.controller.authentication.security;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean{
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenAuthenticationFilter(JwtTokenProvider jwtTokenProvider){
         this.jwtTokenProvider = jwtTokenProvider;

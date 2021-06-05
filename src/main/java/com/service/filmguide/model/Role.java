@@ -1,4 +1,4 @@
-package com.service.filmguide.controller.user.model;
+package com.service.filmguide.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.service.filmguide.controller.movie.model;
+package com.service.filmguide.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,22 +7,22 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-@Table(name = "genre")
-public class Genre {
+@Table(name = "video")
+public class Video {
 
+    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="auto_id")
-    private Long auto_id;
+    private int videoId;
 
-    @Column(name="id")
-    private Integer id;
+    @Column(name = "site")
+    private String site;
 
-    @Column(name="name")
-    private String name;
+    @Column(name = "key")
+    private String key;
 }

@@ -1,6 +1,6 @@
 package com.service.filmguide.controller.user.repository;
 
-import com.service.filmguide.controller.user.model.Role;
+import com.service.filmguide.model.Role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;

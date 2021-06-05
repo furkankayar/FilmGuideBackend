@@ -1,19 +1,16 @@
 package com.service.filmguide.controller.movie.repository;
 
 import com.service.filmguide.controller.common.utility.CommonUtility;
-import com.service.filmguide.controller.movie.model.Movie;
+import com.service.filmguide.model.Movie;
 import com.service.filmguide.controller.movie.service.AsyncService;
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 import com.service.filmguide.controller.user.repository.IUserRepository;
 import com.service.filmguide.themoviedb.dto.TrendDTO;
 import com.service.filmguide.themoviedb.dto.TrendingTodayDTO;
-import com.service.filmguide.controller.movie.model.TrendingMovies;
 import com.service.filmguide.themoviedb.service.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,15 +37,27 @@ public class TrendingMoviesProvider {
     public TrendingTodayDTO getTrendingMovies(int page){
 
         User currentUser = commonUtility.getCurrentUser();
+        List<Movie> movies = movieRepository.findAll();
 
-        TrendingTodayDTO trendingTodayDTO = TrendingTodayDTO.builder().page(page).results(new ArrayList<TrendDTO>()).build();
+        TrendingTodayDTO trendingTodayDTO = apiService.getTrendingMovies(page);
+        asyncService.fetchAllMovieDataAsync(trendingTodayDTO);
 
-        List<TrendingMovies> trendingMovies = trendingMoviesRepository.findByPageNumber(page);
-        if(trendingMovies.size() == 0){
-            trendingTodayDTO = apiService.getTrendingMovies(page);
-            asyncService.fetchAllMovieDataAsync(trendingTodayDTO);
+        for(TrendDTO trendDTO : trendingTodayDTO.getResults()){
+            trendDTO.setWatchlisted(false);
+            for(Movie movie : currentUser.getWatchlist()){
+                if(movie.getMovieId() == trendDTO.getMovieId()){
+                        trendDTO.setWatchlisted(true);
+                }
+            }
+
+            //Movie movie = movieRepository.findById(trendDTO.getMovieId()).orElse(null);
+            if(!movies.contains(trendDTO.mapToMovie())){
+                movieRepository.save(trendDTO.mapToMovie());
+            }
+
         }
-        else{
+
+        /*else{
             for(TrendingMovies trendingMovie : trendingMovies){
                 TrendDTO trendDTO = trendingMovie.getMovie().mapToTrendDTO();
                 trendDTO.setWatchlisted(false);
@@ -59,7 +68,7 @@ public class TrendingMoviesProvider {
                 }
                 trendingTodayDTO.getResults().add(trendDTO);
             }
-        }
+        }*/
 
         return trendingTodayDTO;
     }

@@ -2,20 +2,30 @@ package com.service.filmguide.controller.movie.service;
 
 
 import com.service.filmguide.controller.common.exception.MovieNotFoundException;
+import com.service.filmguide.controller.common.exception.ReviewNotFoundException;
+import com.service.filmguide.controller.common.exception.UserNotFoundException;
 import com.service.filmguide.controller.common.utility.CommonUtility;
-import com.service.filmguide.controller.movie.model.Movie;
 import com.service.filmguide.controller.movie.repository.IMovieRepository;
+import com.service.filmguide.controller.movie.repository.IReviewRepository;
+import com.service.filmguide.controller.movie.request.ReviewDAO;
+import com.service.filmguide.controller.movie.response.GenreResponse;
+import com.service.filmguide.controller.movie.response.MovieResponse;
+import com.service.filmguide.controller.movie.response.ReviewResponse;
 import com.service.filmguide.controller.user.repository.IUserRepository;
-import com.service.filmguide.controller.user.service.IUserService;
+import com.service.filmguide.model.Genre;
+import com.service.filmguide.model.Movie;
+import com.service.filmguide.model.Review;
+import com.service.filmguide.themoviedb.dto.PersonDTO;
+import com.service.filmguide.themoviedb.dto.VideoDTO;
+import com.service.filmguide.themoviedb.service.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MovieService {
@@ -29,6 +39,80 @@ public class MovieService {
     @Autowired
     private IMovieRepository movieRepository;
 
+    @Autowired
+    private IReviewRepository reviewRepository;
+
+    @Autowired
+    private APIService apiService;
+
+    public MovieResponse getMovie(int movieId){
+
+        User user = commonUtility.getCurrentUser();
+        Movie movie = movieRepository.findById(movieId).orElse(null);
+
+        if(movie == null){
+            movie = apiService.getMovie(movieId).mapToMovie();
+            if(movie == null){
+                return MovieResponse.builder().build();
+            } else {
+                movie.setFullyFetched(true);
+                for(PersonDTO personDTO: apiService.getCast(movie.getMovieId()).getCast()){
+                    movie.getCast().add(personDTO.mapToPerson());
+                }
+                for(VideoDTO videoDTO : apiService.getVideos(movie.getMovieId()).getResults()){
+                    movie.getVideos().add(videoDTO.mapToVideo());
+                }
+                movieRepository.save(movie);
+                movie = movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
+            }
+        }
+
+        boolean watchlisted = false;
+        for(Movie m : user.getWatchlist()){
+            if (m.equals(movie)) {
+                watchlisted = true;
+                break;
+            }
+        }
+        List<GenreResponse> genres = new ArrayList<>();
+        for(Genre genre : movie.getGenres()){
+            genres.add(GenreResponse.builder().name(genre.getName()).id(genre.getId()).build());
+        }
+
+        List<ReviewResponse> reviews = new ArrayList<>();
+        for(Review review : movie.getReviews()){
+            User reviewUser = userRepository.findById(review.getUserId()).orElseThrow(()->new UserNotFoundException(review.getUserId()));
+            reviews.add(ReviewResponse.builder()
+                    .content(review.getContent())
+                    .date(review.getDate())
+                    .id(review.getId())
+                    .likeCount(review.getLikeCount())
+                    .rating(review.getRating())
+                    .user(reviewUser)
+                    .title(review.getTitle())
+                    .liked(user.getLikedReviews().contains(review.getId()))
+                    .build());
+        }
+
+        return MovieResponse.builder()
+                .movieId(movie.getMovieId())
+                .title(movie.getTitle())
+                .releaseDate(movie.getReleaseDate())
+                .overview(movie.getOverview())
+                .posterPath(movie.getPosterUrl())
+                .backdropPath(movie.getBackdropUrl())
+                .tagline(movie.getTagline())
+                .rate(movie.getRate())
+                .lang(movie.getLang())
+                .genres(genres)
+                .spokenLanguages(new ArrayList<>(movie.getSpokenLanguages()))
+                .cast(new ArrayList<>(movie.getCast()))
+                .videos(new ArrayList<>(movie.getVideos()))
+                .reviews(reviews)
+                .watchlisted(watchlisted)
+                .build();
+    }
+
     public ResponseEntity<Object> addMovieToWatchlist(int movieId){
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
         User user = commonUtility.getCurrentUser();
@@ -41,11 +125,73 @@ public class MovieService {
         return commonUtility.buildResponse(map, HttpStatus.OK);
     }
 
-    public ResponseEntity<Object> removeFromWatchlist(int movieId){
+    public ResponseEntity<Object> likeReview(int reviewId){
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
+        User user = commonUtility.getCurrentUser();
+
+        if(!user.getLikedReviews().remove(review.getId())){
+            review.setLikeCount(review.getLikeCount() + 1);
+            reviewRepository.save(review);
+            user.getLikedReviews().add(review.getId());
+        }
+        else {
+            review.setLikeCount(Math.max(0, review.getLikeCount() - 1));
+            reviewRepository.save(review);
+        }
+
+        userRepository.save(user);
+
+        ReviewResponse reviewResponse = ReviewResponse.builder()
+                .rating(review.getRating())
+                .liked(user.getLikedReviews().contains(review.getId()))
+                .title(review.getTitle())
+                .id(review.getId())
+                .likeCount(review.getLikeCount())
+                .content(review.getContent())
+                .user(userRepository.findById(review.getUserId()).orElse(null))
+                .date(review.getDate())
+                .build();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("review", reviewResponse);
+
+        return commonUtility.buildResponse(map, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> makeReview(int movieId, ReviewDAO reviewDAO){
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
         User user = commonUtility.getCurrentUser();
-        user.getWatchlist().remove(movie);
-        userRepository.save(user);
+
+        Review review = Review.builder()
+                .userId(user.getId())
+                .content(reviewDAO.getContent())
+                .likeCount(0)
+                .title(reviewDAO.getTitle())
+                .rating(reviewDAO.getRating())
+                .date(new Date())
+                .build();
+
+        movie.getReviews().add(review);
+        movieRepository.save(movie);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+
+        return commonUtility.buildResponse(map, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> removeFromWatchlist(int movieId){
+        User user = commonUtility.getCurrentUser();
+        Movie toRemove = null;
+        for(Movie movie: user.getWatchlist()){
+            if(movie.getMovieId() == movieId){
+                toRemove = movie;
+            }
+        }
+        if(toRemove != null){
+            user.getWatchlist().remove(toRemove);
+            userRepository.save(user);
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("success", true);
         return commonUtility.buildResponse(map, HttpStatus.OK);

@@ -1,8 +1,7 @@
 package com.service.filmguide.controller.movie.repository;
 
-import com.service.filmguide.model.Movie;
+import com.service.filmguide.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IMovieRepository extends JpaRepository<Movie, Integer> {
-
+public interface IReviewRepository  extends JpaRepository<Review, Integer> {
 }

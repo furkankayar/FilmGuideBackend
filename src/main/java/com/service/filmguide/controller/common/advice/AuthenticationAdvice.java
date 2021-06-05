@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.service.filmguide.controller.common.error.ApiError;
 import com.service.filmguide.controller.common.utility.CommonUtility;
-import com.service.filmguide.security.InvalidJwtAuthenticationException;
+import com.service.filmguide.controller.authentication.security.InvalidJwtAuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

@@ -1,4 +1,4 @@
-package com.service.filmguide.security;
+package com.service.filmguide.controller.authentication.security;
 
 import java.util.Base64;
 import java.util.Collection;

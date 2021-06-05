@@ -1,9 +1,9 @@
 package com.service.filmguide.themoviedb.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.service.filmguide.controller.movie.model.Genre;
-import com.service.filmguide.controller.movie.model.Movie;
-import com.service.filmguide.controller.movie.model.SpokenLanguage;
+import com.service.filmguide.model.Genre;
+import com.service.filmguide.model.Movie;
+import com.service.filmguide.model.SpokenLanguage;
 import lombok.*;
 
 import java.util.HashSet;
@@ -25,6 +25,10 @@ public class MovieDTO {
     private String overview;
     @JsonProperty("poster_path")
     private String posterPath;
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
+    @JsonProperty("tagline")
+    private String tagline;
     @JsonProperty("genres")
     private List<Genre> genres;
     @JsonProperty("spoken_languages")
@@ -43,6 +47,8 @@ public class MovieDTO {
                 .releaseDate(this.releaseDate)
                 .overview(this.overview)
                 .posterUrl(this.posterPath)
+                .backdropUrl(this.backdropPath)
+                .tagline(this.tagline)
                 .genres(new HashSet<>(this.genres))
                 .spokenLanguages(new HashSet<>(this.spokenLanguages))
                 .rate(this.rate)

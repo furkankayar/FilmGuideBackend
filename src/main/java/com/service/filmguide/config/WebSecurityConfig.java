@@ -1,7 +1,7 @@
 package com.service.filmguide.config;
 
-import com.service.filmguide.security.JwtTokenAuthenticationFilter;
-import com.service.filmguide.security.RestAuthenticationEntryPoint;
+import com.service.filmguide.controller.authentication.security.JwtTokenAuthenticationFilter;
+import com.service.filmguide.controller.authentication.security.RestAuthenticationEntryPoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

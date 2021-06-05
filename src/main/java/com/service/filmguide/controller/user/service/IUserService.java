@@ -2,7 +2,7 @@ package com.service.filmguide.controller.user.service;
 
 import java.util.Optional;
 
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

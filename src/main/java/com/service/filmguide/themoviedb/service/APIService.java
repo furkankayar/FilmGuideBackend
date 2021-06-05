@@ -1,9 +1,8 @@
 package com.service.filmguide.themoviedb.service;
 
+import com.service.filmguide.model.Video;
 import com.service.filmguide.themoviedb.Utility;
-import com.service.filmguide.themoviedb.dto.MovieCreditsDTO;
-import com.service.filmguide.themoviedb.dto.MovieDTO;
-import com.service.filmguide.themoviedb.dto.TrendingTodayDTO;
+import com.service.filmguide.themoviedb.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,10 +11,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class APIService {
 
     @Autowired
-    private WebClient.Builder webClientBuilder;
+    private WebClient webClient;
 
     public TrendingTodayDTO getTrendingMovies(int page){
-        return webClientBuilder.build()
+        return webClient
                 .get()
                 .uri(Utility.buildUri("trending/movie/day", "page", page))
                 .retrieve()
@@ -24,7 +23,7 @@ public class APIService {
     }
 
     public MovieDTO getMovie(int movieId){
-        return webClientBuilder.build()
+        return webClient
                 .get()
                 .uri(Utility.buildUri("movie/" + movieId))
                 .retrieve()
@@ -33,7 +32,7 @@ public class APIService {
     }
 
     public MovieCreditsDTO getCast(int movieId){
-        return webClientBuilder.build()
+        return webClient
                 .get()
                 .uri(Utility.buildUri("movie/" + movieId + "/credits"))
                 .retrieve()
@@ -41,5 +40,13 @@ public class APIService {
                 .block();
     }
 
+    public VideosDTO getVideos(int movieId){
+        return webClient
+                .get()
+                .uri(Utility.buildUri("movie/" + movieId + "/videos"))
+                .retrieve()
+                .bodyToMono(VideosDTO.class)
+                .block();
+    }
 
 }

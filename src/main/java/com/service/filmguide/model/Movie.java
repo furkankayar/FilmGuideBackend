@@ -1,4 +1,4 @@
-package com.service.filmguide.controller.movie.model;
+package com.service.filmguide.model;
 
 import com.service.filmguide.themoviedb.dto.TrendDTO;
 import lombok.AllArgsConstructor;
@@ -36,6 +36,12 @@ public class Movie {
     @Column(name="poster_path")
     private String posterUrl;
 
+    @Column(name="backdrop_path")
+    private String backdropUrl;
+
+    @Column(name="tagline")
+    private String tagline;
+
     @Column(name="vote_average")
     private float rate;
 
@@ -43,21 +49,31 @@ public class Movie {
     private String lang;
 
     @Column(name="genres")
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private Set<Genre> genres = new HashSet<>();
 
     @Column(name="spoken_languages")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<SpokenLanguage> spokenLanguages = new HashSet<>();
 
     @Column(name="cast")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Person> cast = new HashSet<>();
 
-    @Column(name = "video_key")
-    private String videoKey;
+    @Column(name = "videos")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Video> videos = new HashSet<>();
+
+    @Column(name = "reviews")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Review> reviews = new HashSet<>();
+
+    @Column(name = "fullyFetched")
+    private boolean fullyFetched;
 
 
     public TrendDTO mapToTrendDTO(){
@@ -76,5 +92,12 @@ public class Movie {
                 .lang(this.lang)
                 .overview(this.overview)
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object movie){
+        if(movie instanceof Movie)
+            return ((Movie) movie).getMovieId().equals(this.movieId);
+        return this.equals(movie);
     }
 }

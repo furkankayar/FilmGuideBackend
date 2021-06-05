@@ -1,6 +1,7 @@
 package com.service.filmguide.themoviedb.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.service.filmguide.model.Movie;
 import lombok.*;
 
 import java.util.List;
@@ -45,4 +46,17 @@ public class TrendDTO {
                 .popularity(this.popularity)
                 .build();
     }*/
+
+    public Movie mapToMovie(){
+        return Movie.builder()
+                .movieId(this.movieId)
+                .posterUrl(this.posterUrl)
+                .rate(this.rate)
+                .title(this.title)
+                .releaseDate(this.releaseDate)
+                .lang(this.lang)
+                .overview(this.overview)
+                .fullyFetched(false)
+                .build();
+    }
 }

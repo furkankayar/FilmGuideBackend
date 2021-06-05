@@ -1,20 +1,9 @@
-package com.service.filmguide.controller.user.model;
+package com.service.filmguide.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import com.service.filmguide.controller.movie.model.Movie;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -59,6 +48,11 @@ public final class User implements UserDetails {
     @Builder.Default
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Movie> watchlist = new HashSet<>();
+
+    @Builder.Default
+    @Column(name = "likedReviews")
+    @ElementCollection(fetch = FetchType.EAGER, targetClass=Integer.class)
+    private List<Integer> likedReviews = new ArrayList<>();
 
     @Column(name = "accountNonExpired")
     @Builder.Default

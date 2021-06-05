@@ -2,7 +2,7 @@ package com.service.filmguide.controller.authentication.utility;
 
 import com.service.filmguide.controller.authentication.request.RegisterDAO;
 import com.service.filmguide.controller.user.response.UserProfileDTO;
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;

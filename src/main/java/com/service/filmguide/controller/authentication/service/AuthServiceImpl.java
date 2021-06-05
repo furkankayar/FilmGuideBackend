@@ -13,9 +13,9 @@ import com.service.filmguide.controller.authentication.request.RegisterDAO;
 import com.service.filmguide.controller.authentication.response.AuthenticationResponse;
 import com.service.filmguide.controller.authentication.response.RegisterationResponse;
 import com.service.filmguide.controller.user.response.UserProfileDTO;
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 import com.service.filmguide.controller.user.repository.IRoleRepository;
-import com.service.filmguide.security.JwtTokenProvider;
+import com.service.filmguide.controller.authentication.security.JwtTokenProvider;
 
 import com.service.filmguide.controller.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class AuthServiceImpl implements IAuthService {
     private UserServiceImpl userService;
 
     @Autowired
-    private RefreshTokenService refreshTokenService;
+    private RefreshTokenServiceImpl refreshTokenService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -75,13 +75,12 @@ public class AuthServiceImpl implements IAuthService {
         String newRefreshToken = "";
         
 
-            newAccessToken = jwtTokenProvider.createToken(loginDAO.getUsername(), this.userService.findByUsername(loginDAO.getUsername()).orElseThrow(
+        newAccessToken = jwtTokenProvider.createToken(loginDAO.getUsername(), this.userService.findByUsername(loginDAO.getUsername()).orElseThrow(
                     () -> new UsernameNotFoundException("Username " + loginDAO.getUsername() + " not found"))
                     .getAuthorities());
-            newRefreshToken = refreshTokenService.generateRefreshToken().getToken();
-            responseHeaders.add(HttpHeaders.SET_COOKIE, cookieGenerator(jwtTokenName, newAccessToken).toString());
-            responseHeaders.add(HttpHeaders.SET_COOKIE, cookieGenerator(refreshTokenName, newRefreshToken).toString());
-
+        newRefreshToken = refreshTokenService.generateRefreshToken().getToken();
+        responseHeaders.add(HttpHeaders.SET_COOKIE, cookieGenerator(jwtTokenName, newAccessToken).toString());
+        responseHeaders.add(HttpHeaders.SET_COOKIE, cookieGenerator(refreshTokenName, newRefreshToken).toString());
 
 
         return ResponseEntity.ok()

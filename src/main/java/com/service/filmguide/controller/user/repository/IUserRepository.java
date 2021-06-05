@@ -2,7 +2,7 @@ package com.service.filmguide.controller.user.repository;
 
 import java.util.Optional;
 
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;

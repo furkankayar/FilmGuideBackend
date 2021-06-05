@@ -1,4 +1,4 @@
-package com.service.filmguide.controller.authentication.model;
+package com.service.filmguide.model;
 
 import java.time.Instant;
 

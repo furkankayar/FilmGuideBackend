@@ -7,9 +7,9 @@ import com.service.filmguide.controller.authentication.request.RefreshTokenDAO;
 import com.service.filmguide.controller.authentication.request.RegisterDAO;
 import com.service.filmguide.controller.authentication.response.AuthenticationResponse;
 import com.service.filmguide.controller.authentication.response.RegisterationResponse;
+import com.service.filmguide.controller.authentication.service.RefreshTokenServiceImpl;
 import com.service.filmguide.controller.user.response.UserProfileDTO;
 import com.service.filmguide.controller.authentication.service.AuthServiceImpl;
-import com.service.filmguide.controller.authentication.service.RefreshTokenService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +24,10 @@ public class AuthenticationController {
     private AuthServiceImpl authService;
 
     @Autowired
-    private RefreshTokenService refreshTokenService;
+    private RefreshTokenServiceImpl refreshTokenService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<AuthenticationResponse> login(
-            @Valid @RequestBody LoginDAO body
-    ){
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody LoginDAO body){
         return authService.login(body);
     }
 

@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import com.service.filmguide.controller.authentication.utility.AuthenticationMapper;
 import com.service.filmguide.controller.user.request.UserDAO;
 import com.service.filmguide.controller.user.response.UserProfileDTO;
-import com.service.filmguide.controller.user.model.User;
+import com.service.filmguide.model.User;
 import com.service.filmguide.controller.user.service.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
