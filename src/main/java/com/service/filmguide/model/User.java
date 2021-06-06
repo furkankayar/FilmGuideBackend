@@ -46,8 +46,9 @@ public final class User implements UserDetails {
     private Set<Role> roles = new HashSet<Role>();
 
     @Builder.Default
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Movie> watchlist = new HashSet<>();
+    @Column(name = "watchlist")
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = Integer.class)
+    private Set<Integer> watchlist = new HashSet<>();
 
     @Builder.Default
     @Column(name = "likedReviews")

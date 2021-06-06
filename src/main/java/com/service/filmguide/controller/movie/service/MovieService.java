@@ -68,8 +68,8 @@ public class MovieService {
         }
 
         boolean watchlisted = false;
-        for(Movie m : user.getWatchlist()){
-            if (m.equals(movie)) {
+        for(Integer m : user.getWatchlist()){
+            if (m.equals(movie.getMovieId())) {
                 watchlisted = true;
                 break;
             }
@@ -80,7 +80,9 @@ public class MovieService {
         }
 
         List<ReviewResponse> reviews = new ArrayList<>();
-        for(Review review : movie.getReviews()){
+        List<Review> movieReviews = new ArrayList<>(movie.getReviews());
+        movieReviews.sort(Comparator.comparing(Review::getDate));
+        for(Review review : movieReviews){
             User reviewUser = userRepository.findById(review.getUserId()).orElseThrow(()->new UserNotFoundException(review.getUserId()));
             reviews.add(ReviewResponse.builder()
                     .content(review.getContent())
@@ -117,7 +119,7 @@ public class MovieService {
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
         User user = commonUtility.getCurrentUser();
 
-        user.getWatchlist().add(movie);
+        user.getWatchlist().add(movie.getMovieId());
         userRepository.save(user);
         Map<String, Object> map = new HashMap<>();
         map.put("success", true);
@@ -182,9 +184,9 @@ public class MovieService {
 
     public ResponseEntity<Object> removeFromWatchlist(int movieId){
         User user = commonUtility.getCurrentUser();
-        Movie toRemove = null;
-        for(Movie movie: user.getWatchlist()){
-            if(movie.getMovieId() == movieId){
+        Integer toRemove = null;
+        for(Integer movie: user.getWatchlist()){
+            if(movie == movieId){
                 toRemove = movie;
             }
         }

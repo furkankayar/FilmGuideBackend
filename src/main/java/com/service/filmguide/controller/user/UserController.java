@@ -7,20 +7,18 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.service.filmguide.controller.authentication.utility.AuthenticationMapper;
+import com.service.filmguide.controller.movie.response.MovieResponse;
 import com.service.filmguide.controller.user.request.UserDAO;
 import com.service.filmguide.controller.user.response.UserProfileDTO;
 import com.service.filmguide.model.User;
 import com.service.filmguide.controller.user.service.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
 @RequestMapping("/user")
 public class UserController {
 
@@ -54,5 +52,10 @@ public class UserController {
                 .lastName(userDao.getLastName())
                 .build()
         );
+    }
+
+    @GetMapping("/{username}/watchlist")
+    public ResponseEntity<Object> getWatchlist(@PathVariable String username){
+        return userService.getWatchlist(username);
     }
 }

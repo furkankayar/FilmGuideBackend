@@ -44,8 +44,8 @@ public class TrendingMoviesProvider {
 
         for(TrendDTO trendDTO : trendingTodayDTO.getResults()){
             trendDTO.setWatchlisted(false);
-            for(Movie movie : currentUser.getWatchlist()){
-                if(movie.getMovieId() == trendDTO.getMovieId()){
+            for(Integer movie : currentUser.getWatchlist()){
+                if(movie == trendDTO.getMovieId()){
                         trendDTO.setWatchlisted(true);
                 }
             }

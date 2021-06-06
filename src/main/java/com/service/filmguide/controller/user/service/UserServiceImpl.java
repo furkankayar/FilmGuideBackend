@@ -1,13 +1,20 @@
 package com.service.filmguide.controller.user.service;
 
-import java.util.Optional;
+import java.util.*;
 
+import com.service.filmguide.controller.common.utility.CommonUtility;
+import com.service.filmguide.controller.movie.repository.IMovieRepository;
 import com.service.filmguide.controller.user.utility.UserMapper;
 import com.service.filmguide.controller.user.response.UserProfileDTO;
+import com.service.filmguide.model.Movie;
 import com.service.filmguide.model.User;
 import com.service.filmguide.controller.user.repository.IUserRepository;
 
+import com.service.filmguide.themoviedb.dto.TrendDTO;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -22,6 +29,12 @@ public class UserServiceImpl implements IUserService {
     
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private CommonUtility commonUtility;
+
+    @Autowired
+    private IMovieRepository movieRepository;
 
     @Override
     public Optional<User> findById(Long id) {
@@ -53,5 +66,27 @@ public class UserServiceImpl implements IUserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> byUsername = userRepository.findByUsername(username);
         return byUsername.orElseThrow(() -> new UsernameNotFoundException("User is not found!"));
+    }
+
+    public ResponseEntity<Object> getWatchlist(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User is not found!"));
+        User requestingUser = commonUtility.getCurrentUser();
+
+        List<TrendDTO> movies = new ArrayList<>();
+
+        for(Integer movieId : user.getWatchlist()){
+            Movie movie = movieRepository.findById(movieId).orElse(null);
+            if(movie != null){
+                TrendDTO trendDTO = movie.mapToTrendDTO();
+                trendDTO.setWatchlisted(requestingUser.getWatchlist().contains(movie.getMovieId()));
+                movies.add(trendDTO);
+            }
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        map.put("watchlist", movies);
+
+        return commonUtility.buildResponse(map, HttpStatus.OK);
     }
 }
