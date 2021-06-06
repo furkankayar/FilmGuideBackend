@@ -10,8 +10,7 @@ import com.service.filmguide.model.Movie;
 import com.service.filmguide.model.User;
 import com.service.filmguide.controller.user.repository.IUserRepository;
 
-import com.service.filmguide.themoviedb.dto.TrendDTO;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.service.filmguide.themoviedb.dto.MovieListItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,14 +71,14 @@ public class UserServiceImpl implements IUserService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User is not found!"));
         User requestingUser = commonUtility.getCurrentUser();
 
-        List<TrendDTO> movies = new ArrayList<>();
+        List<MovieListItemDTO> movies = new ArrayList<>();
 
         for(Integer movieId : user.getWatchlist()){
             Movie movie = movieRepository.findById(movieId).orElse(null);
             if(movie != null){
-                TrendDTO trendDTO = movie.mapToTrendDTO();
-                trendDTO.setWatchlisted(requestingUser.getWatchlist().contains(movie.getMovieId()));
-                movies.add(trendDTO);
+                MovieListItemDTO movieListItemDTO = movie.mapToTrendDTO();
+                movieListItemDTO.setWatchlisted(requestingUser.getWatchlist().contains(movie.getMovieId()));
+                movies.add(movieListItemDTO);
             }
         }
 

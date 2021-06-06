@@ -12,11 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-public class TrendingTodayDTO {
+public class MovieListDTO {
     @JsonProperty("page")
     private int page;
     @JsonProperty("results")
     @Builder.Default
-    private List<TrendDTO> results = new ArrayList<>();
+    private List<MovieListItemDTO> results = new ArrayList<>();
 }
 

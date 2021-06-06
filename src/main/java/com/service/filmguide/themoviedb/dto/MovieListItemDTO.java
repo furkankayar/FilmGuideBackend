@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-public class TrendDTO {
+public class MovieListItemDTO {
     @JsonProperty("id")
     private int movieId;
     @JsonProperty("genre_ids")

@@ -2,18 +2,17 @@ package com.service.filmguide.controller.movie;
 
 import com.service.filmguide.controller.common.exception.MovieNotFoundException;
 import com.service.filmguide.controller.common.exception.ReviewNotFoundException;
-import com.service.filmguide.controller.movie.repository.TrendingMoviesProvider;
+import com.service.filmguide.controller.movie.repository.MovieListProvider;
 import com.service.filmguide.controller.movie.request.ReviewDAO;
 import com.service.filmguide.controller.movie.response.MovieResponse;
 import com.service.filmguide.controller.movie.service.MovieService;
-import com.service.filmguide.themoviedb.dto.TrendingTodayDTO;
+import com.service.filmguide.themoviedb.dto.MovieListDTO;
 import com.service.filmguide.themoviedb.service.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
@@ -24,20 +23,55 @@ public class MovieController {
     private APIService apiService;
 
     @Autowired
-    private TrendingMoviesProvider trendingMoviesProvider;
-
-    @Autowired
     private MovieService movieService;
 
     @GetMapping("/trending")
-    public TrendingTodayDTO getTrendingMovies(@RequestParam(value = "page", required = false) Integer pageNumber){
+    public MovieListDTO getTrendingMovies(@RequestParam(value = "page", required = false) Integer pageNumber){
         if(pageNumber == null){
             pageNumber = 1;
         }
         else if(pageNumber < 1 || pageNumber > 10){
             pageNumber = 1;
         }
-        return trendingMoviesProvider.getTrendingMovies(pageNumber);
+        return movieService.getTrendingMovies(pageNumber);
+    }
+
+    @GetMapping("/top_rated")
+    public MovieListDTO getTopRatedMovies(@RequestParam(value = "page", required = false) Integer pageNumber){
+        if(pageNumber == null){
+            pageNumber = 1;
+        }
+        else if(pageNumber < 1 || pageNumber > 10){
+            pageNumber = 1;
+        }
+        return movieService.getTopRatedMovies(pageNumber);
+    }
+
+    @GetMapping("/upcoming")
+    public MovieListDTO getUpComingMovies(@RequestParam(value = "page", required = false) Integer pageNumber){
+        if(pageNumber == null){
+            pageNumber = 1;
+        }
+        else if(pageNumber < 1 || pageNumber > 10){
+            pageNumber = 1;
+        }
+        return movieService.getUpComingMovies(pageNumber);
+    }
+
+    @GetMapping("/now_playing")
+    public MovieListDTO getNowPlayingMovies(@RequestParam(value = "page", required = false) Integer pageNumber){
+        if(pageNumber == null){
+            pageNumber = 1;
+        }
+        else if(pageNumber < 1 || pageNumber > 10){
+            pageNumber = 1;
+        }
+        return movieService.getNowPlayingMovies(pageNumber);
+    }
+
+    @GetMapping("/search")
+    public MovieListDTO getNowPlayingMovies(@RequestParam(value = "query", required = true) String query){
+        return movieService.searchMovies(query);
     }
 
     @GetMapping("/{movie_id}")

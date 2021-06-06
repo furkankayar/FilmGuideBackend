@@ -1,6 +1,6 @@
 package com.service.filmguide.model;
 
-import com.service.filmguide.themoviedb.dto.TrendDTO;
+import com.service.filmguide.themoviedb.dto.MovieListItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "movie")
-public class Movie {
+public class Movie{
 
     @Id
     @Column(name="movie_id")
@@ -76,13 +76,13 @@ public class Movie {
     private boolean fullyFetched;
 
 
-    public TrendDTO mapToTrendDTO(){
+    public MovieListItemDTO mapToTrendDTO(){
         List<Integer> genreIds = new ArrayList<>();
         for(Genre genre: this.genres){
             genreIds.add(genre.getId());
         }
 
-        return TrendDTO.builder()
+        return MovieListItemDTO.builder()
                 .movieId(this.movieId)
                 .genreIds(genreIds)
                 .posterUrl(this.posterUrl)
@@ -100,4 +100,5 @@ public class Movie {
             return ((Movie) movie).getMovieId().equals(this.movieId);
         return this.equals(movie);
     }
+
 }

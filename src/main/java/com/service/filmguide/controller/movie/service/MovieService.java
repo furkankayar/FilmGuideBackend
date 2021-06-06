@@ -7,6 +7,7 @@ import com.service.filmguide.controller.common.exception.UserNotFoundException;
 import com.service.filmguide.controller.common.utility.CommonUtility;
 import com.service.filmguide.controller.movie.repository.IMovieRepository;
 import com.service.filmguide.controller.movie.repository.IReviewRepository;
+import com.service.filmguide.controller.movie.repository.MovieListProvider;
 import com.service.filmguide.controller.movie.request.ReviewDAO;
 import com.service.filmguide.controller.movie.response.GenreResponse;
 import com.service.filmguide.controller.movie.response.MovieResponse;
@@ -15,6 +16,7 @@ import com.service.filmguide.controller.user.repository.IUserRepository;
 import com.service.filmguide.model.Genre;
 import com.service.filmguide.model.Movie;
 import com.service.filmguide.model.Review;
+import com.service.filmguide.themoviedb.dto.MovieListDTO;
 import com.service.filmguide.themoviedb.dto.PersonDTO;
 import com.service.filmguide.themoviedb.dto.VideoDTO;
 import com.service.filmguide.themoviedb.service.APIService;
@@ -44,6 +46,9 @@ public class MovieService {
 
     @Autowired
     private APIService apiService;
+
+    @Autowired
+    private MovieListProvider movieListProvider;
 
     public MovieResponse getMovie(int movieId){
 
@@ -197,5 +202,25 @@ public class MovieService {
         Map<String, Object> map = new HashMap<>();
         map.put("success", true);
         return commonUtility.buildResponse(map, HttpStatus.OK);
+    }
+
+    public MovieListDTO getTrendingMovies(int page){
+        return movieListProvider.getTrendingMovies(page);
+    }
+
+    public MovieListDTO getTopRatedMovies(int page) {
+        return movieListProvider.getTopRatedMovies(page);
+    }
+
+    public MovieListDTO getUpComingMovies(int page) {
+        return movieListProvider.getUpComingMovies(page);
+    }
+
+    public MovieListDTO getNowPlayingMovies(int page) {
+        return movieListProvider.getNowPlayingMovies(page);
+    }
+
+    public MovieListDTO searchMovies(String query) {
+        return movieListProvider.searchMovies(query);
     }
 }

@@ -9,7 +9,7 @@ public class Utility {
         return Properties.API_BASE + path + "?api_key=" + Properties.API_KEY;
     }
 
-    public String buildUri(String path, String param1, int val1){
+    public String buildUri(String path, String param1, Object val1){
         return buildUri(path) + "&" + param1 + "=" + val1;
     }
 }
