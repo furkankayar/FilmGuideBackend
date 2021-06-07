@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.servlet.http.Cookie;
+
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Configuration
@@ -52,11 +54,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/refresh/token").permitAll()
+                .antMatchers(HttpMethod.GET, "/movie/trending").permitAll()
+                .antMatchers(HttpMethod.GET, "/movie/top_rated").permitAll()
+                .antMatchers(HttpMethod.GET, "/movie/upcoming").permitAll()
+                .antMatchers(HttpMethod.GET, "/movie/now_playing").permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/user").hasAuthority("admin")
-                .antMatchers(HttpMethod.GET, "/user/{user_id}").hasAuthority("user")
-                .antMatchers(HttpMethod.GET, "/movie/trending").hasAuthority("user")
+                .antMatchers(HttpMethod.GET, "/user/{username}").hasAuthority("user")
                 .anyRequest().authenticated();
                 
             

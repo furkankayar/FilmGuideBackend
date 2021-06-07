@@ -41,9 +41,11 @@ public class MovieListProvider {
 
         for(MovieListItemDTO movieListItemDTO : movieListDTO.getResults()){
             movieListItemDTO.setWatchlisted(false);
-            for(Integer movie : currentUser.getWatchlist()){
-                if(movie == movieListItemDTO.getMovieId()){
+            if(currentUser != null){
+                for(Integer movie : currentUser.getWatchlist()){
+                    if(movie == movieListItemDTO.getMovieId()){
                         movieListItemDTO.setWatchlisted(true);
+                    }
                 }
             }
 
@@ -65,7 +67,12 @@ public class MovieListProvider {
         asyncService.fetchAllMovieDataAsync(movieListDTO);
 
         for(MovieListItemDTO movieListItemDTO : movieListDTO.getResults()){
-            movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            if(currentUser != null){
+                movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            }
+            else{
+                movieListItemDTO.setWatchlisted(false);
+            }
 
             if(!movies.contains(movieListItemDTO.mapToMovie())){
                 movieRepository.save(movieListItemDTO.mapToMovie());
@@ -84,7 +91,12 @@ public class MovieListProvider {
         asyncService.fetchAllMovieDataAsync(movieListDTO);
 
         for(MovieListItemDTO movieListItemDTO : movieListDTO.getResults()){
-            movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            if(currentUser != null){
+                movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            }
+            else{
+                movieListItemDTO.setWatchlisted(false);
+            }
 
             if(!movies.contains(movieListItemDTO.mapToMovie())){
                 movieRepository.save(movieListItemDTO.mapToMovie());
@@ -102,7 +114,12 @@ public class MovieListProvider {
         asyncService.fetchAllMovieDataAsync(movieListDTO);
 
         for(MovieListItemDTO movieListItemDTO : movieListDTO.getResults()){
-            movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            if(currentUser != null){
+                movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            }
+            else{
+                movieListItemDTO.setWatchlisted(false);
+            }
 
             if(!movies.contains(movieListItemDTO.mapToMovie())){
                 movieRepository.save(movieListItemDTO.mapToMovie());
@@ -120,7 +137,12 @@ public class MovieListProvider {
         asyncService.fetchAllMovieDataAsync(movieListDTO);
 
         for(MovieListItemDTO movieListItemDTO : movieListDTO.getResults()){
-            movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            if(currentUser != null){
+                movieListItemDTO.setWatchlisted(currentUser.getWatchlist().contains(movieListItemDTO.getMovieId()));
+            }
+            else{
+                movieListItemDTO.setWatchlisted(false);
+            }
 
             if(!movies.contains(movieListItemDTO.mapToMovie())){
                 movieRepository.save(movieListItemDTO.mapToMovie());

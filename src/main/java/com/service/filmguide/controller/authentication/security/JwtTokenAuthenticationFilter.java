@@ -33,10 +33,7 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean{
         
         String token = getJwtFromCookie((HttpServletRequest)req);
         try{
-            if(token == null || token.equals("")){
-                throw new InvalidJwtAuthenticationException("Missing authentication token!");
-            }
-            else if(jwtTokenProvider.validateToken(token)) {
+            if(jwtTokenProvider.validateToken(token)) {
                 Authentication auth = jwtTokenProvider.getAuthentication(token);
                 if(auth != null){
                     SecurityContextHolder.getContext().setAuthentication(auth);              
