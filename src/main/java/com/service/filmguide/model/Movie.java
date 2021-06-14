@@ -72,6 +72,11 @@ public class Movie{
     @Builder.Default
     private Set<Review> reviews = new HashSet<>();
 
+    @Builder.Default
+    @Column(name = "similar_movies")
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = Integer.class)
+    private Set<Integer> similarMovies = new HashSet<>();
+
     @Column(name = "fullyFetched")
     private boolean fullyFetched;
 

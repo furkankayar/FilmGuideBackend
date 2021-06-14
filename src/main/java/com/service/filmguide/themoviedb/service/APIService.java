@@ -58,6 +58,15 @@ public class APIService {
 
     }
 
+    public MovieListDTO getSimilarMovies(int movieId){
+        return webClient
+                .get()
+                .uri(Utility.buildUri("movie/" + movieId + "/similar"))
+                .retrieve()
+                .bodyToMono(MovieListDTO.class)
+                .block();
+    }
+
     public MovieDTO getMovie(int movieId){
         return webClient
                 .get()

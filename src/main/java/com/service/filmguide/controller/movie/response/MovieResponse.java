@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.service.filmguide.model.Person;
 import com.service.filmguide.model.SpokenLanguage;
 import com.service.filmguide.model.Video;
+import com.service.filmguide.themoviedb.dto.MovieListItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,6 +65,9 @@ public class MovieResponse {
 
     @JsonProperty("reviews")
     private List<ReviewResponse> reviews = new ArrayList<>();
+
+    @JsonProperty("similar_movies")
+    private List<MovieListItemDTO> similarMovies = new ArrayList<>();
 
     @JsonProperty("watchlisted")
     private Boolean watchlisted;

@@ -22,6 +22,8 @@ public class PersonDTO {
     private String birthday;
     @JsonProperty("profile_path")
     private String profilePath;
+    @JsonProperty("popularity")
+    private Float popularity;
 
     public Person mapToPerson(){
         return Person.builder()
@@ -30,6 +32,7 @@ public class PersonDTO {
                 .placeOfBirth(this.placeOfBirth)
                 .biography(this.biography)
                 .birthday(this.birthday)
+                .popularity(this.popularity)
                 .profilePath(this.profilePath)
                 .build();
     }

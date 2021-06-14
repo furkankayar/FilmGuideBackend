@@ -36,4 +36,15 @@ public class Person {
 
     @Column(name="profile_path")
     private String profilePath;
+
+    @Column(name="popularity")
+    private Float popularity;
+
+    @Override
+    public boolean equals(Object person2){
+        if(person2 instanceof Person){
+            return this.person_id.equals(((Person)person2).getPerson_id());
+        }
+        return this.equals(person2);
+    }
 }

@@ -1,5 +1,6 @@
 package com.service.filmguide.model;
 
+import com.service.filmguide.controller.movie.response.GenreResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +26,15 @@ public class Genre {
 
     @Column(name="name")
     private String name;
+
+    @Override
+    public boolean equals(Object genre){
+        if(genre instanceof Genre){
+            return this.id.equals(((Genre)genre).getId());
+        }
+        else if(genre instanceof GenreResponse){
+            return this.id.equals(((GenreResponse)genre).getId());
+        }
+        return this.equals(genre);
+    }
 }
